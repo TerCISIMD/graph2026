@@ -32,7 +32,12 @@ void TestWeightedOrientedGraph();
 
 /* Сюда нужно добавить объявления тестовых функций. */
 
-
+/**
+ * @brief Набор тестов для алгоритма увеличивающих путей.
+ *
+ * @param cli Указатель на HTTP клиент.
+ */
+ void TestMinCostFlow(httplib::Client* cli);
 
 /* Конец вставки. */
 

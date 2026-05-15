@@ -35,9 +35,17 @@ int main(int argc, char* argv[]) {
   });
 
   /* Сюда нужно вставить обработчик post запроса для алгоритма. */
+    svr.Post("/MinCostFlow", [&](const httplib::Request& req,
+                                        httplib::Response& res) {
+    nlohmann::json input = nlohmann::json::parse(req.body);
+    nlohmann::json output;
 
+    if (graph::MinCostFlowAlg(input, &output) < 0)
+      res.status = 400;
 
-
+    res.set_content(output.dump(), "application/json");
+  });
+  
   /* Конец вставки. */
 
   // Эта функция запускает сервер на указанном порту. Программа не завершится
