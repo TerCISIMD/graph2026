@@ -1,0 +1,79 @@
+#include <string>
+#include <vector>
+#include <nlohmann/json.hpp>
+#include <graph.hpp>
+#include <oriented_graph.hpp>
+#include <weighted_graph.hpp>
+#include <weighted_oriented_graph.hpp>
+#include <min_cost_flow.hpp>
+
+using graph::Graph;
+using graph::OrientedGraph;
+using graph::WeightedGraph;
+using graph::WeightedOrientedGraph;
+
+namespace graph {
+
+int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
+    std::string graphType = input.at("graph_type");
+
+    /*
+    У каждого ребра должна быть пропускная способность и стоимость потока, поэтому изначальный граф должен быть взвешенный.
+    */
+
+    if (graphType == "Graph") {
+        return -1;
+    } else if (graphType == "OrientedGraph") {
+        return -1;
+    } else if (graphType == "WeightedGraph") {
+        std::string weightType = input.at("weight_type");
+        if (weightType == "pair<int, int>") {
+            return MinCostFlowAuth(input, output);
+        } else {
+            return -1;
+        }
+    } else if (graphType == "WeightedOrientedGraph") {
+        std::string weightType = input.at("weight_type");
+        if (weightType == "pair<int, int>") {
+            return MinCostFlowAuth(input, output);
+        } else {
+            return -1;
+        }
+    }
+    
+    return -1;
+}
+
+/**
+ * @brief Метод увеличивающих путей.
+ *
+ * @param input Входные данные в формате JSON.
+ * @param output Выходные данные в формате JSON.
+ * @return Функция возвращает 0 в случае успеха и отрицательное число
+ * если входные данные заданы некорректно.
+ *
+ * Функция запускает алгоритм увеличивающих путей, используя входные данные
+ * в JSON формате. Результат также выдаётся в JSON формате.
+ */
+
+int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
+    WeightedGraph graph; // WeightedGraph, чтобы не было проблем в самом алгоритме(нужен вес ребер, который не имеет исходный класс graph)
+    int flow_cost = input.at("flow_cost");
+    int s = input.at("begin at");
+    int t = input.at("end at");
+    
+    for (auto& vertex : input.at("vertices")) {
+      graph.AddVertex(vertex);
+    }
+
+    for (auto& edge : input.at("edges")) {
+        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), edge.at("weights").at(0), edge.at("weights").at(1), 0,  (graph.Edges(edge.at("to"))).size() });
+
+        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, -edge.at("weights").at(1), 0,  (graph.Edges(edge.at("from"))).size() });
+    }
+    (*output)["result"] = MinCostFlow(graph, flow_cost, s, t);;
+    
+    return 0;
+
+}
+} // namespace graph
