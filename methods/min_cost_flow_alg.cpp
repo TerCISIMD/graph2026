@@ -14,6 +14,8 @@ using graph::WeightedOrientedGraph;
 
 namespace graph {
 
+int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output);
+
 int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
     std::string graphType = input.at("graph_type");
 
@@ -57,7 +59,7 @@ int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
  */
 
 int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
-    WeightedGraph graph; // WeightedGraph, чтобы не было проблем в самом алгоритме(нужен вес ребер, который не имеет исходный класс graph)
+    WeightedGraph<rib> graph; // WeightedGraph, чтобы не было проблем в самом алгоритме(нужен вес ребер, который не имеет исходный класс graph)
     int flow_cost = input.at("flow_cost");
     int s = input.at("begin at");
     int t = input.at("end at");

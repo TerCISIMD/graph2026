@@ -26,10 +26,10 @@ namespace graph {
  *
  */
 
-int MinCostFlow(WeightedGraph graph, int cost_flow, int s, int t){
+int MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t){
     const int INF = 1000*1000*1000;
-    int n = graph.NumVertices();
-    auto g = [&graph](size_t v) { std::vector<rib> ribs; for(auto& vert : graph.Edges(v)) { auto& r = graph.EdgeWeight(v, vert); ribs.push_back({vert, r[0], r[1], r[2], r[3]}); } return ribs; };
+    size_t n = graph.NumVertices();
+    auto g = [&graph](size_t v) { std::vector<rib> ribs; for(auto& vert : graph.Edges(v)) { auto& r = graph.EdgeWeight(v, vert); ribs.push_back({r.b, r.u, r.c, r.f, r.back}); } return ribs; };
     int flow = 0,  cost = 0;
 
     while (flow < cost_flow) {
@@ -38,7 +38,7 @@ int MinCostFlow(WeightedGraph graph, int cost_flow, int s, int t){
 		std::vector<int> q (n);
 		std::vector<int> p (n);
 		std::vector<size_t> p_rib (n);
-		int qh = 0, qt = 0;
+		size_t qh = 0, qt = 0;
 		q[qt++] = s;
 		d[s] = 0;
 		while (qh != qt) {
@@ -54,7 +54,7 @@ int MinCostFlow(WeightedGraph graph, int cost_flow, int s, int t){
 						if (qt == n)  qt = 0;
 					}
 					else if (id[r.b] == 2) {
-						if (--qh == -1)  qh = n-1;
+						if (--qh == -1)  qh = n - 1;
 						q[qh] = r.b;
 					}
 					id[r.b] = 1;
@@ -71,9 +71,9 @@ int MinCostFlow(WeightedGraph graph, int cost_flow, int s, int t){
 		}
 		for (int v = t; v != s; v = p[v]) {
 			int pv = p[v];  size_t pr = p_rib[v],  r = g(pv)[pr].back;
-			g[pv][pr].f += addflow;
-			g[v][r].f -= addflow;
-			cost += g[pv][pr].c * addflow;
+			g(pv)[pr].f += addflow;
+			g(v)[r].f -= addflow;
+			cost += g(pv)[pr].c * addflow;
 		}
 		flow += addflow;
 	}
