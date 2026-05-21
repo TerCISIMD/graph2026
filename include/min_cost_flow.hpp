@@ -26,8 +26,10 @@ namespace graph {
  *
  */
 
-int MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t){
+int MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t) {
     const int INF = 1000*1000*1000;
+	s = s - 1;
+	t = t - 1;
     size_t n = graph.NumVertices();
     auto g = [&graph](size_t v) { std::vector<rib> ribs; for(auto& vert : graph.Edges(v)) { auto& r = graph.EdgeWeight(v, vert); ribs.push_back({r.b, r.u, r.c, r.f, r.back}); } return ribs; };
     int flow = 0,  cost = 0;
@@ -79,7 +81,6 @@ int MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t){
 	}
     return cost;
 }
-
 
 } // namespace graph
 #endif  // INCLUDE_MIN_COST_FLOW_HPP_

@@ -61,6 +61,7 @@ int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
 int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
     WeightedGraph<rib> graph; // WeightedGraph, чтобы не было проблем в самом алгоритме(нужен вес ребер, который не имеет исходный класс graph)
     int flow_cost = input.at("flow_cost");
+    auto g = [&graph](size_t v) { std::vector<rib> ribs; for(auto& vert : graph.Edges(v)) { auto& r = graph.EdgeWeight(v, vert); ribs.push_back({r.b, r.u, r.c, r.f, r.back}); } return ribs; };
     int s = input.at("begin_at");
     int t = input.at("end_at");
     
@@ -69,11 +70,13 @@ int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
     }
 
     for (auto& edge : input.at("edges")) {
-        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights_1"), edge.at("weights_2"), 0,  (graph.Edges(edge.at("to"))).size() });
+        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights_1"), edge.at("weights_2"), 0,  g(edge.at("to")).size() });
 
-        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, (int)edge.at("weights_2"), 0,  (graph.Edges(edge.at("from"))).size() });
+        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, -(int)edge.at("weights_2"), 0,  g(edge.at("from")).size() });
     }
-    (*output)["result"] = MinCostFlow(graph, flow_cost, s, t);
+
+    int res = MinCostFlow(graph, flow_cost, s, t);
+    (*output)["result"] = res;
 
     return 0;
 
