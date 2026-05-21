@@ -29,14 +29,14 @@ int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
         return -1;
     } else if (graphType == "WeightedGraph") {
         std::string weightType = input.at("weight_type");
-        if (weightType == "pair<int, int>") {
+        if (weightType == "<int, int>") {
             return MinCostFlowAuth(input, output);
         } else {
             return -1;
         }
     } else if (graphType == "WeightedOrientedGraph") {
         std::string weightType = input.at("weight_type");
-        if (weightType == "pair<int, int>") {
+        if (weightType == "<int, int>") {
             return MinCostFlowAuth(input, output);
         } else {
             return -1;
@@ -61,20 +61,20 @@ int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
 int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
     WeightedGraph<rib> graph; // WeightedGraph, чтобы не было проблем в самом алгоритме(нужен вес ребер, который не имеет исходный класс graph)
     int flow_cost = input.at("flow_cost");
-    int s = input.at("begin at");
-    int t = input.at("end at");
+    int s = input.at("begin_at");
+    int t = input.at("end_at");
     
     for (auto& vertex : input.at("vertices")) {
       graph.AddVertex(vertex);
     }
 
     for (auto& edge : input.at("edges")) {
-        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights").at("0"), edge.at("weights").at("1"), 0,  (graph.Edges(edge.at("to"))).size() });
+        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights_1"), edge.at("weights_2"), 0,  (graph.Edges(edge.at("to"))).size() });
 
-        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, (int)edge.at("weights").at("1"), 0,  (graph.Edges(edge.at("from"))).size() });
+        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, (int)edge.at("weights_2"), 0,  (graph.Edges(edge.at("from"))).size() });
     }
-    (*output)["result"] = MinCostFlow(graph, flow_cost, s, t);;
-    
+    (*output)["result"] = MinCostFlow(graph, flow_cost, s, t);
+
     return 0;
 
 }

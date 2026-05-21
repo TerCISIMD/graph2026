@@ -14,7 +14,6 @@
 	size_t back;
 };
 
-
 namespace graph {
 
 /**
@@ -22,7 +21,8 @@ namespace graph {
  *
  * @param graph Граф для оалгоритма.
  * @param cost_flow Стоимость потока.
- * @param result результат
+ * @param s исток
+ * @param t сток
  *
  */
 
@@ -78,9 +78,8 @@ int MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t){
 		flow += addflow;
 	}
     return cost;
-    
 }
 
 
 } // namespace graph
-#endif  // INCLUDE_BREADTH_FIRST_TRAVERSAL_HPP_
+#endif  // INCLUDE_MIN_COST_FLOW_HPP_
