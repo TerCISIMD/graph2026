@@ -69,9 +69,9 @@ int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
     }
 
     for (auto& edge : input.at("edges")) {
-        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), edge.at("weights").at("0"), edge.at("weights").at("1"), 0,  (graph.Edges(edge.at("to"))).size() });
+        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights").at("0"), edge.at("weights").at("1"), 0,  (graph.Edges(edge.at("to"))).size() });
 
-        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, -edge.at("weights").at("1"), 0,  (graph.Edges(edge.at("from"))).size() });
+        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, (int)edge.at("weights").at("1"), 0,  (graph.Edges(edge.at("from"))).size() });
     }
     (*output)["result"] = MinCostFlow(graph, flow_cost, s, t);;
     

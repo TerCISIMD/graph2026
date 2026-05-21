@@ -18,7 +18,7 @@ void TestMinCostFlow(httplib::Client* cli) {
 
   input["graph_type"] = "WeightedOrientedGraph";
   input["vertices"] = std::vector<int>{1, 2, 3, 4};
-  input["weightType"] == "pair<int, int>";
+  input["weightType"] = "pair<int, int>";
 
   input["edges"][0]["from"] = 1;
   input["edges"][0]["to"] = 2;
