@@ -6,6 +6,7 @@
 #include <weighted_graph.hpp>
 #include <weighted_oriented_graph.hpp>
 #include <min_cost_flow.hpp>
+#include <iostream>
 
 using graph::Graph;
 using graph::OrientedGraph;
@@ -68,17 +69,15 @@ int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
     for (auto& vertex : input.at("vertices")) {
       graph.AddVertex(vertex);
     }
-
+    //std::cout << 1 << std::endl;
     for (auto& edge : input.at("edges")) {
         graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights_1"), edge.at("weights_2"), 0,  g(edge.at("to")).size() });
-
+        //std::cout << (int)edge.at("weights_1") << " " << (int)edge.at("weights_2") << std::endl;
         graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, -(int)edge.at("weights_2"), 0,  g(edge.at("from")).size() });
     }
-
-    int res = MinCostFlow(graph, flow_cost, s, t);
-    (*output)["result"] = res;
-
-    return 0;
-
+    //std::cout << 2 << std::endl;
+    MinCostFlow(graph, flow_cost, s, t, output);
+    //std::cout << 3 << std::endl;
+    return 1;
 }
 } // namespace graph

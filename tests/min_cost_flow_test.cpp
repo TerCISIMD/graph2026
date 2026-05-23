@@ -55,21 +55,23 @@ static void FirstTest(httplib::Client* cli){
   input["edges"][4]["weights_2"] = 3;
 
   input["flow_cost"] = 4;
-  input["begin_at"] = 1;
-  input["end_at"] = 4;
+  input["begin_at"] = 0;
+  input["end_at"] = 3;
 
   auto res = cli->Post("/MinCostFlow", input.dump(), "application/json");
 
   if (!res) {
     REQUIRE(false);
   }
-  
-  std::cout << res << std::endl;
+
   nlohmann::json output = nlohmann::json::parse(res->body);
+  std::vector<int> result = output.at("result");
 
-  int result = output.at("result");
+  std::unordered_set<int> expected = { 0, 3 };
+  std::unordered_set<int> resultSet;
 
-  int expected = 1;
+  for (int id : result)
+    resultSet.insert(id);
 
-  REQUIRE_EQUAL(expected, (int)res);
+  REQUIRE_EQUAL(expected, resultSet);
 }

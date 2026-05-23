@@ -11,9 +11,6 @@
 #include <nlohmann/json.hpp>
 #include "methods.hpp"
 
-#include <chrono>
-#include <thread>
-
 int main(int argc, char* argv[]) {
   // Порт по-умолчанию.
   int port = 8080;
@@ -32,7 +29,6 @@ int main(int argc, char* argv[]) {
   // Обработчик для GET запроса по адресу /stop. Этот обработчик
   // останавливает сервер.
   svr.Get("/stop", [&](const httplib::Request&, httplib::Response&) {
-    std::this_thread::sleep_for(std::chrono::seconds(30));
     svr.stop();
   });
 
