@@ -35,7 +35,7 @@
 	 nlohmann::json* output) {
    const int INF = INT_MAX / 2;
    size_t n = graph.NumVertices();
-   
+ 
    auto g = [&graph](size_t v) {
 	 std::vector<rib*> ribs;
 	 for (auto& vert : graph.Edges(v)) {
@@ -43,7 +43,7 @@
 	 }
 	 return ribs;
    };
-   
+ 
    int flow = 0;
    int cost = 0;
    std::vector<int> last_path;
@@ -63,15 +63,15 @@
 	   d[i] = INF;
 	   id[i] = 0;
 	 }
-	 
+ 
 	 q[qt++] = s;
 	 d[s] = 0;
-	 
+ 
 	 while (qh != qt) {
 	   int v = q[qh++];
 	   id[v] = 2;
 	   if (qh == n) qh = 0;
-	   
+ 
 	   for (size_t i = 0; i < g(v).size(); ++i) {
 		 rib* r = g(v)[i];
 		 if (r->f < r->u && d[v] + r->c < d[r->b]) {
@@ -89,7 +89,7 @@
 		 }
 	   }
 	 }
-	 
+ 
 	 for (int v = t; v != s; v = p[v]) {
 	   current_path.push_back(v);
 	 }
@@ -109,7 +109,7 @@
 	   size_t pr = p_rib[v];
 	   addflow = std::min(addflow, g(pv)[pr]->u - g(pv)[pr]->f);
 	 }
-	 
+ 
 	 for (int v = t; v != s; v = p[v]) {
 	   int pv = p[v];
 	   size_t pr = p_rib[v];
@@ -132,7 +132,7 @@
 	 //   std::cout << last_path[i] << std::endl;
 	 // }
    }
-   
+ 
    (*output)["result"] = last_path;
  }
  
