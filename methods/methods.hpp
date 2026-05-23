@@ -25,7 +25,7 @@ namespace graph {
  * Функция запускает алгоритм увеличивающих путей, используя входные данные
  * в JSON формате. Результат также выдаётся в JSON формате.
  */
- int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output);
+int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output);
 
 /* Конец вставки. */
 

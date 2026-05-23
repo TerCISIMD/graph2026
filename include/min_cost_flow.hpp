@@ -5,13 +5,15 @@
  * Алгоритм увеличивающих путей.
  */
 
- #ifndef INCLUDE_MIN_COST_FLOW_HPP_
- #define INCLUDE_MIN_COST_FLOW_HPP_
+#ifndef INCLUDE_MIN_COST_FLOW_HPP_
+#define INCLUDE_MIN_COST_FLOW_HPP_
+#include <vector>
+#include <map>
 
- // #include <iostream>
- struct rib {
-	int b, u, c, f;
-	size_t back;
+// #include <iostream>
+struct rib {
+  int b, u, c, f;
+  size_t back;
 };
 
 namespace graph {
@@ -28,12 +30,17 @@ namespace graph {
 void MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t, nlohmann::json* output) {
     const int INF = 1000*1000*1000;
     size_t n = graph.NumVertices();
-    auto g = [&graph](size_t v) { std::vector<rib*> ribs; for(auto& vert : graph.Edges(v)) { ribs.push_back(&graph.EdgeWeight(v , vert)) ;}; return ribs; };
+    auto g = [&graph](size_t v) { std::vector<rib*> ribs; 
+		for (auto& vert : graph.Edges(v))  ribs.push_back(&graph.EdgeWeight(v , vert)); ;
+		return ribs; 
+		};
     int flow = 0,  cost = 0;
 	std::vector<int> last_path;
 
     while (flow < cost_flow) {
+
 		// std::cout << "flow = " << flow << std::endl;
+
 		std::vector<int> current_path;
 		std::map<int, int> id;
 		std::map<int, int> d;
@@ -78,9 +85,9 @@ void MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t, nlohmann
         std::reverse(current_path.begin(), current_path.end());
 		last_path = current_path;
 
-		//for(int i = 0; i < last_path.size(); i++){
-			//std::cout << last_path[i] << std::endl;
-		//}
+		// for(int i = 0; i < last_path.size(); i++){
+			// std::cout << last_path[i] << std::endl;
+		// }
 
 		if (d[t] == INF)  break;
 
@@ -104,9 +111,10 @@ void MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t, nlohmann
         std::reverse(current_path.begin(), current_path.end());
 		last_path = current_path;
 
-		//for(int i = 0; i < last_path.size(); i++){
-			//std::cout << last_path[i] << std::endl;
-		//}
+		// for(int i = 0; i < last_path.size(); i++){
+			// std::cout << last_path[i] << std::endl;
+		// }
+
 	}
 		(*output)["result"] = last_path;
 }
