@@ -63,9 +63,9 @@ int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
     WeightedGraph<rib> graph;
     int flow_cost = input.at("flow_cost");
     auto g = [&graph](size_t v) { std::vector<rib> ribs;
-        for (auto& vert : graph.Edges(v)) { 
+        for (auto& vert : graph.Edges(v)) {
           auto& r = graph.EdgeWeight(v, vert);
-          ribs.push_back({r.b, r.u, r.c, r.f, r.back}); 
+          ribs.push_back({r.b, r.u, r.c, r.f, r.back});
         }
         return ribs;
     };
