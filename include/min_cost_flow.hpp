@@ -28,14 +28,14 @@ namespace graph {
  * @param output результат
  */
 void MinCostFlow(WeightedGraph<rib> graph, int cost_flow, int s, int t,
-	nlohmann::json* output) {
+    nlohmann::json* output) {
     const int INF = 1000*1000*1000;
     size_t n = graph.NumVertices();
     auto g = [&graph](size_t v) { std::vector<rib*> ribs;
-	  for (auto& vert : graph.Edges(v))  
-	    ribs.push_back(&graph.EdgeWeight(v , vert)); ;
-	  return ribs;
-	  };
+      for (auto& vert : graph.Edges(v))
+      ribs.push_back(&graph.EdgeWeight(v , vert));;
+      return ribs;
+    };
     int flow = 0,  cost = 0;
 	std::vector<int> last_path;
 

@@ -37,7 +37,7 @@ void TestWeightedOrientedGraph();
  *
  * @param cli Указатель на HTTP клиент.
  */
- void TestMinCostFlow(httplib::Client* cli);
+void TestMinCostFlow(httplib::Client* cli);
 
 /* Конец вставки. */
 

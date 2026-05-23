@@ -6,7 +6,7 @@
 #include <weighted_graph.hpp>
 #include <weighted_oriented_graph.hpp>
 #include <min_cost_flow.hpp>
-#include <iostream>
+// #include <iostream>
 
 using graph::Graph;
 using graph::OrientedGraph;
@@ -60,27 +60,31 @@ int MinCostFlowAlg(const nlohmann::json& input, nlohmann::json* output) {
  */
 
 int MinCostFlowAuth(const nlohmann::json& input, nlohmann::json* output) {
-    WeightedGraph<rib> graph; // WeightedGraph, чтобы не было проблем в самом алгоритме(нужен вес ребер, который не имеет исходный класс graph)
+    WeightedGraph<rib> graph;
     int flow_cost = input.at("flow_cost");
-    auto g = [&graph](size_t v) { std::vector<rib> ribs; 
-        for(auto& vert : graph.Edges(v)) { auto& r = graph.EdgeWeight(v, vert); ribs.push_back({r.b, r.u, r.c, r.f, r.back}); }
-        return ribs; 
+    auto g = [&graph](size_t v) { std::vector<rib> ribs;
+        for (auto& vert : graph.Edges(v)) { auto& r = graph.EdgeWeight(v, vert); 
+          ribs.push_back({r.b, r.u, r.c, r.f, r.back}); }
+        return ribs;
     };
     int s = input.at("begin_at");
     int t = input.at("end_at");
-    
+
     for (auto& vertex : input.at("vertices")) {
       graph.AddVertex(vertex);
     }
     // std::cout << 1 << std::endl;
     for (auto& edge : input.at("edges")) {
-        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), (int)edge.at("weights_1"), edge.at("weights_2"), 0,  g(edge.at("to")).size() });
-        // std::cout << (int)edge.at("weights_1") << " " << (int)edge.at("weights_2") << std::endl;
-        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0, -(int)edge.at("weights_2"), 0,  g(edge.at("from")).size() });
+        graph.AddEdge(edge.at("from"), edge.at("to"), { edge.at("to"), 
+            static_cast<int>(edge.at("weights_1")),
+            edge.at("weights_2"), 0,  g(edge.at("to")).size() });
+        graph.AddEdge(edge.at("to"), edge.at("from"), { edge.at("from"), 0,
+            -static_cast<int>(edge.at("weights_2")), 0,
+            g(edge.at("from")).size() });
     }
     // std::cout << 2 << std::endl;
     MinCostFlow(graph, flow_cost, s, t, output);
     // std::cout << 3 << std::endl;
     return 1;
 }
-} // namespace graph
+}  // namespace graph

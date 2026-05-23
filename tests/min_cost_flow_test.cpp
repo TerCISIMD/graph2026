@@ -13,7 +13,7 @@
 #include <nlohmann/json.hpp>
 #include "test_core.hpp"
 
-#include <iostream>
+// #include <iostream>
 static void FirstTest(httplib::Client* cli);
 
 void TestMinCostFlow(httplib::Client* cli) {
@@ -22,7 +22,7 @@ void TestMinCostFlow(httplib::Client* cli) {
   RUN_TEST_REMOTE(suite, cli, FirstTest);
 }
 
-static void FirstTest(httplib::Client* cli){
+static void FirstTest(httplib::Client* cli) {
   nlohmann::json input;
 
   input["graph_type"] = "WeightedOrientedGraph";
